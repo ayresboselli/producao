@@ -15,13 +15,13 @@ class CreateTabelaPrecoProdutosTable extends Migration
     {
         Schema::create('tabela_preco_produtos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_tabela');
-            $table->unsignedBigInteger('id_produto');
+            $table->unsignedBigInteger('tabela_preco_id');
+            $table->unsignedBigInteger('produto_id');
             $table->float('preco');
             $table->timestamps();
 
-            $table->foreign('id_tabela')->references('id')->on('tabela_precos');
-            $table->foreign('id_produto')->references('id')->on('produtos');
+            $table->foreign('tabela_preco_id')->references('id')->on('tabela_precos');
+            $table->foreign('produto_id')->references('id')->on('produtos');
         });
     }
 

@@ -13,7 +13,7 @@
 		<a href="/produto" class="btn btn-primary btn-sm">Adicionar</a>
 	</div>
 	<div class="card-body">
-		
+
 		@if (session('status'))
 			<div class="alert alert-success alert-dismissible">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,7 +26,7 @@
 				<p>{{ session('erro') }}</p>
 			</div>
 		@endif
-		
+
 		<div class="table-responsive">
 			<table class="table table-bordered table-sm table-striped dataTable" width="100%" cellspacing="0">
 				<thead>
@@ -85,7 +85,7 @@
 									<a href="/duplicar_produto/{{ $produto->id }}" title='Duplicar' class='text-primary'><i class='fa fa-copy'></i></a>
 								</div>
 								<div class='col-sm-4'>
-									@if($produto->itens == 0 && $produto->uploads == 0)<a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $produto->id }},'{{ $produto->titulo }}')" class='text-danger'><i class='fa fa-trash'></i></a>@endif
+									@if($produto->itens == 0)<a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $produto->id }},'{{ $produto->titulo }}')" class='text-danger'><i class='fa fa-trash'></i></a>@endif
 								</div>
 							</div>
 							@endif
@@ -129,8 +129,8 @@
 		</div>
 	</div>
 </div>
-		
-		
+
+
 <script>
 function Deletar(id, titulo){
 	$('#id_deletar').val(id)

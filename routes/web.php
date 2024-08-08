@@ -120,23 +120,6 @@ Route::post('/gsl/filtrar', [App\Http\Controllers\GSLController::class, 'Filtrar
 Route::post('/gsl/reprocessar', [App\Http\Controllers\GSLController::class, 'Reprocessar']);
 Route::post('/gsl/configuracoes', [App\Http\Controllers\GSLController::class, 'Configuracoes']);
 
-// PrintOne
-Route::get('/printone', [App\Http\Controllers\PrintOneController::class, 'Index'])->middleware('autorizacao:integ_ver');
-Route::get('/printone_produto/{id?}', [App\Http\Controllers\PrintOneController::class, 'Editar'])->middleware('autorizacao:integ_edit');
-Route::post('/printone_produto/salvar', [App\Http\Controllers\PrintOneController::class, 'Salvar'])->middleware('autorizacao:integ_edit');
-Route::get('/printone_duplicar_produto/{id}', [App\Http\Controllers\PrintOneController::class, 'Duplicar'])->middleware('autorizacao:integ_edit');
-Route::post('/printone/deletar', [App\Http\Controllers\PrintOneController::class, 'Deletar'])->middleware('autorizacao:integ_edit');
-
-Route::get('/printone_clientes', [App\Http\Controllers\PrintOneController::class, 'Clientes'])->middleware('autorizacao:integ_ver');
-Route::get('/printone_cliente/{id?}', [App\Http\Controllers\PrintOneController::class, 'EditarCliente'])->middleware('autorizacao:integ_edit');
-Route::post('/printone_cliente/salvar', [App\Http\Controllers\PrintOneController::class, 'SalvarCliente'])->middleware('autorizacao:integ_edit');
-Route::post('/printone_cliente/deletar', [App\Http\Controllers\PrintOneController::class, 'DeletarCliente'])->middleware('autorizacao:integ_edit');
-
-Route::get('/printone_itens/{id_produto}', [App\Http\Controllers\PrintOneController::class, 'Itens'])->middleware('autorizacao:integ_edit');
-Route::get('/printone_item/{id_produto}/{id?}', [App\Http\Controllers\PrintOneController::class, 'EditarItem'])->middleware('autorizacao:integ_edit');
-Route::post('/printone_item/salvar', [App\Http\Controllers\PrintOneController::class, 'SalvarItem'])->middleware('autorizacao:integ_edit');
-Route::post('/printone_item/deletar', [App\Http\Controllers\PrintOneController::class, 'DeletarItem'])->middleware('autorizacao:integ_edit');
-
 // Arquivamento
 Route::get('/arquivamento', [App\Http\Controllers\ArquivamentoController::class, 'Arquivamento'])->middleware('autorizacao:arquiv_edit');
 Route::post('/arquivamento', [App\Http\Controllers\ArquivamentoController::class, 'Salvar'])->middleware('autorizacao:arquiv_edit');

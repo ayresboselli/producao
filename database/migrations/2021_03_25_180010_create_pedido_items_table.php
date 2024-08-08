@@ -13,17 +13,17 @@ class CreatePedidoItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pedido_items', function (Blueprint $table) {
+        Schema::create('pedido_itens', function (Blueprint $table) {
             $table->id();
 			$table->integer('id_externo')->nullable();
-			$table->unsignedBigInteger('id_pedido');
-			$table->unsignedBigInteger('id_produto')->nullable();
+			$table->unsignedBigInteger('pedido_id');
+			$table->unsignedBigInteger('produto_id')->nullable();
 			$table->integer('id_produto_externo');
 			$table->text('url_origem')->nullable();
             $table->timestamps();
-			
-			$table->foreign('id_pedido')->references('id')->on('pedidos');
-			$table->foreign('id_produto')->references('id')->on('produtos');
+
+			$table->foreign('pedido_id')->references('id')->on('pedidos');
+			$table->foreign('produto_id')->references('id')->on('produtos');
         });
     }
 

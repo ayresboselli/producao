@@ -16,12 +16,12 @@ class CreateProdutosTable extends Migration
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
 			$table->integer('id_externo')->nullable();
-			
-			$table->unsignedBigInteger('id_imposicao_tipo');
-			$table->unsignedBigInteger('id_imposicao_nome')->nullable();
-			$table->unsignedBigInteger('id_impressao_hotfolder');
-			$table->unsignedBigInteger('id_impressao_substrato');
-			
+
+			$table->unsignedBigInteger('imposicao_tipo_id');
+			$table->unsignedBigInteger('imposicao_nome_id')->nullable();
+			$table->unsignedBigInteger('impressao_hotfolder_id');
+			$table->unsignedBigInteger('impressao_substrato_id');
+
 			$table->string('titulo',80);
 			$table->integer('largura');
 			$table->integer('altura');
@@ -31,11 +31,11 @@ class CreateProdutosTable extends Migration
 			$table->integer('sangr_dir')->nullable();
 			$table->string('disposicao',80)->nullable();
             $table->timestamps();
-			
-			$table->foreign('id_imposicao_tipo')->references('id')->on('imposicao_tipos');
-			$table->foreign('id_imposicao_nome')->references('id')->on('imposicao_nomes');
-			$table->foreign('id_impressao_hotfolder')->references('id')->on('impressao_hotfolders');
-			$table->foreign('id_impressao_substrato')->references('id')->on('impressao_substratos');
+
+			$table->foreign('imposicao_tipo_id')->references('id')->on('imposicao_tipos');
+			$table->foreign('imposicao_nome_id')->references('id')->on('imposicao_nomes');
+			$table->foreign('impressao_hotfolder_id')->references('id')->on('impressao_hotfolders');
+			$table->foreign('impressao_substrato_id')->references('id')->on('impressao_substratos');
         });
     }
 

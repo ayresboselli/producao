@@ -15,6 +15,7 @@ class CreatePedidosTable extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBiginteger('user_id');
 			$table->integer('id_externo');
 			$table->boolean('tipo_contrato')->default(false);
 			$table->integer('id_cliente');
@@ -24,8 +25,10 @@ class CreatePedidosTable extends Migration
 			$table->date('previsao_entrega');
 			$table->boolean('deletar_origem')->default(false);
             $table->timestamps();
-			
+
 			$table->unique(['id_externo']);
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

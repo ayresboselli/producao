@@ -15,17 +15,17 @@ class CreateRecortesTable extends Migration
     {
         Schema::create('recortes', function (Blueprint $table) {
             $table->id();
-			$table->unsignedBigInteger('id_arquivo');
-			$table->unsignedBigInteger('id_usuario')->nullable();
+			$table->unsignedBigInteger('pedido_item_arquivo_id');
+			$table->unsignedBigInteger('user_id')->nullable();
 			$table->integer('crop_pos_x')->nullable();
 			$table->integer('crop_pos_y')->nullable();
 			$table->integer('crop_largura')->nullable();
 			$table->integer('crop_altura')->nullable();
 			$table->integer('situacao')->default(0);
             $table->timestamps();
-			
-			$table->foreign('id_arquivo')->references('id')->on('pedido_item_arquivos');
-			$table->foreign('id_usuario')->references('id')->on('users');
+
+			$table->foreign('pedido_item_arquivo_id')->references('id')->on('pedido_item_arquivos');
+			$table->foreign('user_id')->references('id')->on('users');
         });
     }
 

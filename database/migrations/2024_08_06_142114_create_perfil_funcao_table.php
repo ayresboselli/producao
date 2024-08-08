@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePedidoAlbumsTable extends Migration
+class CreatePerfilFuncaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreatePedidoAlbumsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pedido_albums', function (Blueprint $table) {
+        Schema::create('perfil_funcao', function (Blueprint $table) {
             $table->id();
-			$table->integer('id_externo')->nullable();
-			$table->unsignedBigInteger('id_pedido');
-			$table->unsignedBigInteger('id_arquivo');
-			$table->string('codigo',150);
+            $table->unsignedBiginteger('perfil_id');
+            $table->unsignedBiginteger('funcao_id');
             $table->timestamps();
-			
-			$table->foreign('id_pedido')->references('id')->on('pedidos');
+
+            $table->foreign('perfil_id')->references('id')->on('perfis');
+            $table->foreign('funcao_id')->references('id')->on('funcoes');
         });
     }
 
@@ -32,6 +31,6 @@ class CreatePedidoAlbumsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pedido_albums');
+        Schema::dropIfExists('perfil_funcao');
     }
 }

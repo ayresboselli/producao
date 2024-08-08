@@ -15,7 +15,8 @@ class CreateGslsTable extends Migration
     {
         Schema::create('gsls', function (Blueprint $table) {
             $table->id();
-            
+
+            $table->unsignedBigInteger('pedido_item_id');
             $table->string('nome_album', 150);
             $table->integer('ordem_servico');
             $table->integer('ordem_producao');
@@ -28,8 +29,10 @@ class CreateGslsTable extends Migration
             $table->timestamp('dt_correcao_saida')->nullable();
             $table->timestamp('dt_imposicao_entrada')->nullable();
             $table->timestamp('dt_imposicao_saida')->nullable();
-            
+
             $table->timestamps();
+
+            $table->foreign('pedido_item_id')->references('id')->on('pedido_itens');
         });
     }
 

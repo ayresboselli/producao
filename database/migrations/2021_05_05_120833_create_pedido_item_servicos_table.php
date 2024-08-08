@@ -16,14 +16,14 @@ class CreatePedidoItemServicosTable extends Migration
         Schema::create('pedido_item_servicos', function (Blueprint $table) {
             $table->id();
             $table->integer('id_externo')->nullable();
-			$table->unsignedBigInteger('id_pedido');
-			$table->unsignedBigInteger('id_servico')->nullable();
+			$table->unsignedBigInteger('pedido_id');
+			$table->unsignedBigInteger('servico_id')->nullable();
 			$table->integer('id_servico_externo');
 			$table->text('url_origem')->nullable();
             $table->timestamps();
-			
-			$table->foreign('id_pedido')->references('id')->on('pedidos');
-			$table->foreign('id_servico')->references('id')->on('servicos');
+
+			$table->foreign('pedido_id')->references('id')->on('pedidos');
+			$table->foreign('servico_id')->references('id')->on('servicos');
         });
     }
 

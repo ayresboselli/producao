@@ -6,7 +6,7 @@ function Autorizacao($funcao){
             if(in_array($funcUser, $funcao))
                 return true;
         }
-    
+
     return false;
 }
 ?>
@@ -28,13 +28,13 @@ function Autorizacao($funcao){
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.ico') }}">
     </head>
-	
+
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="/">Produção</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-			
+
             <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 			<!--
                 <div class="input-group">
@@ -45,7 +45,7 @@ function Autorizacao($funcao){
                 </div>
 				-->
             </form>
-			
+
             <!-- Navbar-->
             <ul class="navbar-nav ml-auto ml-md-0">
                 <li class="nav-item dropdown">
@@ -56,7 +56,7 @@ function Autorizacao($funcao){
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-						
+
 						<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
 						<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
 							@csrf
@@ -65,7 +65,7 @@ function Autorizacao($funcao){
                 </li>
             </ul>
         </nav>
-		
+
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -76,14 +76,56 @@ function Autorizacao($funcao){
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            
+
                             @if(Autorizacao(['gsl_ver','gsl_edit']))
                                 <a class="nav-link" href="/gsl">
                                     <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                                     Fluxo
                                 </a>
                             @endif
-							
+
+                            @if(Autorizacao(['pedido_ver','pedido_edit','recorte_ver','recorte_edit','arquiv_edit','reimp_ver','reimp_edit','guiasOP_ver','guiasOP_edit']))
+                                <div class="sb-sidenav-menu-heading">Ordem de Serviços</div>
+
+                                @if(Autorizacao(['pedido_ver','pedido_edit']))
+                                <a class="nav-link" href="/pedidos">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    Ordens de Serviço
+                                </a>
+                                @endif
+                                @if(Autorizacao(['pedido_ver','pedido_edit']))
+                                <a class="nav-link" href="/pedidos_itens">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    Ordens de Produção
+                                </a>
+                                @endif
+                                @if(Autorizacao(['guiasOP_ver','guiasOP_edit']))
+                                <a class="nav-link" href="/guiasOP">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    Imprimir Guias de OPs
+                                </a>
+                                @endif
+                                @if(Autorizacao(['recorte_ver','recorte_edit']))
+                                <a class="nav-link" href="/recortes">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-crop-alt"></i></div>
+                                    Recorte de Imagens
+                                </a>
+                                @endif
+                                @if(Autorizacao(['reimp_ver','reimp_edit']))
+                                <a class="nav-link" href="/reimpressoes_album">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-redo"></i></div>
+                                    Reimpressão de álbuns
+                                </a>
+                                @endif
+
+                                @if(Autorizacao(['arquiv_edit']))
+                                <a class="nav-link" href="/arquivamento">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-save"></i></div>
+                                    Arquivamento
+                                </a>
+                                @endif
+                            @endif
+
                             @if(Autorizacao(['imp_ferr_ver','imp_ferr_edit','imp_mod_ver','imp_mod_edit','imp_hotf_ver','imp_hotf_edit','imp_substr_ver','imp_substr_edit','produto_ver','produto_edit','cliente_ver','cliente_edit']))
                                 <div class="sb-sidenav-menu-heading">Cadastro</div>
 
@@ -149,63 +191,6 @@ function Autorizacao($funcao){
                                 @endif
                             @endif
 
-                            @if(Autorizacao(['pedido_ver','pedido_edit','recorte_ver','recorte_edit','arquiv_edit','reimp_ver','reimp_edit','guiasOP_ver','guiasOP_edit']))
-                                <div class="sb-sidenav-menu-heading">Ordem de Serviços</div>
-                                
-                                @if(Autorizacao(['pedido_ver','pedido_edit']))
-                                <a class="nav-link" href="/pedidos">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                    Ordens de Serviço
-                                </a>
-                                @endif
-                                @if(Autorizacao(['pedido_ver','pedido_edit']))
-                                <a class="nav-link" href="/pedidos_itens">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                    Ordens de Produção
-                                </a>
-                                @endif
-                                @if(Autorizacao(['guiasOP_ver','guiasOP_edit']))
-                                <a class="nav-link" href="/guiasOP">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                    Imprimir Guias de OPs
-                                </a>
-                                @endif
-                                @if(Autorizacao(['recorte_ver','recorte_edit']))
-                                <a class="nav-link" href="/recortes">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-crop-alt"></i></div>
-                                    Recorte de Imagens
-                                </a>
-                                @endif
-                                @if(Autorizacao(['reimp_ver','reimp_edit']))
-                                <a class="nav-link" href="/reimpressoes_album">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-redo"></i></div>
-                                    Reimpressão de álbuns
-                                </a>
-                                @endif
-                                
-                                @if(Autorizacao(['arquiv_edit']))
-                                <a class="nav-link" href="/arquivamento">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-save"></i></div>
-                                    Arquivamento
-                                </a>
-                                @endif
-                            @endif
-
-                            @if(Autorizacao(['integ_ver','integ_edit']))
-                            <div class="sb-sidenav-menu-heading">Integração</div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrintOne" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-print"></i></div>
-                                Print-One
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePrintOne" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/printone_clientes">Clientes</a>
-                                    <a class="nav-link" href="/printone">Produtos</a>
-                                </nav>
-                            </div>
-                            @endif
-
                             @if(Autorizacao(['perfis_ver','perfis_edit']))
                             <div class="sb-sidenav-menu-heading">Usuários</div>
                             <a class="nav-link" href="/perfis">
@@ -220,7 +205,7 @@ function Autorizacao($funcao){
                                 Usuários
                             </a>
                             @endif
-                            
+
                             <a class="nav-link" href="/log">
                                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Logs
@@ -235,9 +220,9 @@ function Autorizacao($funcao){
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-						
+
 						@yield('content')
-						
+
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">

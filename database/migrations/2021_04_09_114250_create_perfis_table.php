@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrintOneProdutosTable extends Migration
+class CreatePerfisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePrintOneProdutosTable extends Migration
      */
     public function up()
     {
-        Schema::create('print_one_produtos', function (Blueprint $table) {
+        Schema::create('perfis', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_printone');
-            $table->string('titulo', 150);
+            $table->string('titulo',80);
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePrintOneProdutosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('print_one_produtos');
+        Schema::dropIfExists('perfis');
     }
 }

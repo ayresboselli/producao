@@ -15,13 +15,13 @@ class CreateIndicadoresApontamentosTable extends Migration
     {
         Schema::create('indicadores_apontamentos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_lamina')->nullable()
+            $table->unsignedBigInteger('id_lamina')->nullable();
             $table->unsignedBigInteger('id_indicador');
             $table->unsignedBigInteger('id_celula_ident');
             $table->unsignedBigInteger('id_celula_falha');
-            
+
             $table->timestamps();
-            
+
             $table->foreign('id_lamina')->references('id')->on('reimpressao_album_laminas');
             $table->foreign('id_indicador')->references('id')->on('indicadores_listas');
             $table->foreign('id_celula_ident')->references('id')->on('celulas');

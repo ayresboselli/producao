@@ -15,6 +15,7 @@ class CreateReimpressaoAlbumLaminasTable extends Migration
     {
         Schema::create('reimpressao_album_laminas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('reimpressao_album_pedido_id');
             $table->integer('foto_frente');
             $table->integer('foto_verso');
             $table->string('album', 80);
@@ -22,6 +23,10 @@ class CreateReimpressaoAlbumLaminasTable extends Migration
             $table->string('defeito_descricao', 150);
             $table->integer('status')->default(0);
             $table->timestamps();
+
+            $table->foreign('reimpressao_album_pedido_id')
+                ->references('id')
+                ->on('reimpressao_album_pedidos');
         });
     }
 

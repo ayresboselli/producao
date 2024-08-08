@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFuncaosTable extends Migration
+class CreateUserPerfilTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateFuncaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('funcaos', function (Blueprint $table) {
+        Schema::create('user_perfil', function (Blueprint $table) {
             $table->id();
-            $table->string('chave',15);
-            $table->string('descricao');
+            $table->unsignedBiginteger('user_id');
+            $table->unsignedBiginteger('perfil_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('perfil_id')->references('id')->on('perfis');
         });
     }
 
@@ -28,6 +31,6 @@ class CreateFuncaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('funcaos');
+        Schema::dropIfExists('user_perfil');
     }
 }

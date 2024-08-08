@@ -15,19 +15,19 @@ class CreatePedidoItemArquivosTable extends Migration
     {
         Schema::create('pedido_item_arquivos', function (Blueprint $table) {
             $table->id();
-			
-			$table->unsignedBigInteger('id_item');
-			$table->unsignedBigInteger('id_album')->nullable();
+
+			$table->unsignedBigInteger('pedido_item_id');
+			$table->unsignedBigInteger('pedido_item_album_id')->nullable();
 			$table->integer('folha')->nullable();
 			$table->text('url_imagem')->nullable();
 			$table->string('nome_arquivo');
 			$table->integer('largura');
 			$table->integer('altura');
 			$table->integer('situacao')->default(0);
-			
-			$table->foreign('id_item')->references('id')->on('pedido_items');
-			$table->foreign('id_album')->references('id')->on('pedido_albums');
-			
+
+			$table->foreign('pedido_item_id')->references('id')->on('pedido_itens');
+			$table->foreign('pedido_item_album_id')->references('id')->on('pedido_item_albuns');
+
             $table->timestamps();
         });
     }
