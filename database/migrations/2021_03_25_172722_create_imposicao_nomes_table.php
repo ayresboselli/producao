@@ -15,12 +15,12 @@ class CreateImposicaoNomesTable extends Migration
     {
         Schema::create('imposicao_nomes', function (Blueprint $table) {
             $table->id();
-			$table->unsignedBigInteger('id_imposicao');
+			$table->unsignedBigInteger('imposicao_tipo_id');
 			$table->string('titulo',80);
 			$table->text('descricao')->nullable();
             $table->timestamps();
-			
-			$table->foreign('id_imposicao')->references('id')->on('imposicao_tipos');
+
+			$table->foreign('imposicao_tipo_id')->references('id')->on('imposicao_tipos');
         });
     }
 

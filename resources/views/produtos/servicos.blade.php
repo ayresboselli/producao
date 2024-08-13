@@ -13,7 +13,7 @@
 		<a href="/servico" class="btn btn-primary btn-sm">Adicionar</a>
 	</div>
 	<div class="card-body">
-		
+
 		@if (session('status'))
 			<div class="alert alert-success alert-dismissible">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,7 +26,7 @@
 				<p>{{ session('erro') }}</p>
 			</div>
 		@endif
-		
+
 		<div class="table-responsive">
 			<table class="table table-bordered table-sm dataTable" width="100%" cellspacing="0">
 				<thead>
@@ -58,8 +58,10 @@
 									<a href="/servico/{{ $servico->id }}" title='Alterar' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></a>
 								</div>
 								<div class='col-sm-6'>
-									@if($servico->itens == 0)
-                                    <a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $servico->id }},'{{ $servico->titulo }}')" class='btn btn-danger btn-sm'><i class='fa fa-trash'></i></a>
+									@if(count($servico->itens) == 0)
+                                    <a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $servico->id }},'{{ $servico->titulo }}')" class='btn btn-danger btn-sm'>
+                                        <i class='fa fa-trash'></i>
+                                    </a>
                                     @endif
 								</div>
 							</div>
@@ -104,8 +106,8 @@
 		</div>
 	</div>
 </div>
-		
-		
+
+
 <script>
 function Deletar(id, titulo){
 	$('#id_deletar').val(id)

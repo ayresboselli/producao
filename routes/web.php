@@ -22,46 +22,39 @@ Auth::routes(['register' => false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/log', [App\Http\Controllers\LogController::class, 'index']);
 
-Route::get('/ferramentas_imposicao', [App\Http\Controllers\ImposicaoController::class, 'FerramentasImposicao'])->middleware('autorizacao:imp_ferr_ver');
-Route::get('/ferramenta_imposicao', [App\Http\Controllers\ImposicaoController::class, 'FerramentaImposicao'])->middleware('autorizacao:imp_ferr_edit');
-Route::get('/ferramenta_imposicao/{id?}', [App\Http\Controllers\ImposicaoController::class, 'FerramentaImposicao'])->middleware('autorizacao:imp_ferr_edit');
-Route::post('/ferramenta_imposicao/salvar', [App\Http\Controllers\ImposicaoController::class, 'FerramentaImposicaoSalvar'])->middleware('autorizacao:imp_ferr_edit');
-Route::post('/ferramenta_imposicao/deletar', [App\Http\Controllers\ImposicaoController::class, 'FerramentaImposicaoDeletar'])->middleware('autorizacao:imp_ferr_edit');
+Route::get('/ferramentas_imposicao', [App\Http\Controllers\ImposicaoFerramentaController::class, 'Listar'])->middleware('autorizacao:imp_ferr_ver');
+Route::get('/ferramenta_imposicao/{id?}', [App\Http\Controllers\ImposicaoFerramentaController::class, 'Buscar'])->middleware('autorizacao:imp_ferr_edit');
+Route::post('/ferramenta_imposicao/salvar', [App\Http\Controllers\ImposicaoFerramentaController::class, 'Salvar'])->middleware('autorizacao:imp_ferr_edit');
+Route::post('/ferramenta_imposicao/deletar', [App\Http\Controllers\ImposicaoFerramentaController::class, 'Deletar'])->middleware('autorizacao:imp_ferr_edit');
 
-Route::get('/modelos_imposicao', [App\Http\Controllers\ImposicaoController::class, 'ModelosImposicao'])->middleware('autorizacao:imp_mod_ver');
-Route::get('/modelo_imposicao', [App\Http\Controllers\ImposicaoController::class, 'ModeloImposicao'])->middleware('autorizacao:imp_mod_edit');
-Route::get('/modelo_imposicao/{id?}', [App\Http\Controllers\ImposicaoController::class, 'ModeloImposicao'])->middleware('autorizacao:imp_mod_edit');
-Route::post('/modelo_imposicao/salvar', [App\Http\Controllers\ImposicaoController::class, 'ModeloImposicaoSalvar'])->middleware('autorizacao:imp_mod_edit');
-Route::post('/modelo_imposicao/deletar', [App\Http\Controllers\ImposicaoController::class, 'ModeloImposicaoDeletar'])->middleware('autorizacao:imp_mod_edit');
+Route::get('/modelos_imposicao', [App\Http\Controllers\ImposicaoModeloController::class, 'Listar'])->middleware('autorizacao:imp_mod_ver');
+Route::get('/modelo_imposicao/{id?}', [App\Http\Controllers\ImposicaoModeloController::class, 'Buscar'])->middleware('autorizacao:imp_mod_edit');
+Route::post('/modelo_imposicao/salvar', [App\Http\Controllers\ImposicaoModeloController::class, 'Salvar'])->middleware('autorizacao:imp_mod_edit');
+Route::post('/modelo_imposicao/deletar', [App\Http\Controllers\ImposicaoModeloController::class, 'Deletar'])->middleware('autorizacao:imp_mod_edit');
 
-Route::get('/hotfolders_impressao', [App\Http\Controllers\ImpressaoController::class, 'Hotfolders'])->middleware('autorizacao:imp_hotf_ver');
-Route::get('/hotfolder_impressao', [App\Http\Controllers\ImpressaoController::class, 'Hotfolder'])->middleware('autorizacao:imp_hotf_edit');
-Route::get('/hotfolder_impressao/{id?}', [App\Http\Controllers\ImpressaoController::class, 'Hotfolder'])->middleware('autorizacao:imp_hotf_edit');
-Route::post('/hotfolder_impressao/salvar', [App\Http\Controllers\ImpressaoController::class, 'HotfolderSalvar'])->middleware('autorizacao:imp_hotf_edit');
-Route::post('/hotfolder_impressao/deletar', [App\Http\Controllers\ImpressaoController::class, 'HotfolderDeletar'])->middleware('autorizacao:imp_hotf_edit');
+Route::get('/hotfolders_impressao', [App\Http\Controllers\ImpressaoHotFolderController::class, 'Listar'])->middleware('autorizacao:imp_hotf_ver');
+Route::get('/hotfolder_impressao/{id?}', [App\Http\Controllers\ImpressaoHotFolderController::class, 'Buscar'])->middleware('autorizacao:imp_hotf_edit');
+Route::post('/hotfolder_impressao/salvar', [App\Http\Controllers\ImpressaoHotFolderController::class, 'Salvar'])->middleware('autorizacao:imp_hotf_edit');
+Route::post('/hotfolder_impressao/deletar', [App\Http\Controllers\ImpressaoHotFolderController::class, 'Deletar'])->middleware('autorizacao:imp_hotf_edit');
 
-Route::get('/substratos_impressao', [App\Http\Controllers\ImpressaoController::class, 'Substratos'])->middleware('autorizacao:imp_substr_ver');
-Route::get('/substrato_impressao', [App\Http\Controllers\ImpressaoController::class, 'Substrato'])->middleware('autorizacao:imp_substr_edit');
-Route::get('/substrato_impressao/{id?}', [App\Http\Controllers\ImpressaoController::class, 'Substrato'])->middleware('autorizacao:imp_substr_edit');
-Route::post('/substrato_impressao/salvar', [App\Http\Controllers\ImpressaoController::class, 'SubstratoSalvar'])->middleware('autorizacao:imp_substr_edit');
-Route::post('/substrato_impressao/deletar', [App\Http\Controllers\ImpressaoController::class, 'SubstratoDeletar'])->middleware('autorizacao:imp_substr_edit');
+Route::get('/substratos_impressao', [App\Http\Controllers\ImpressaoSubstratoController::class, 'Listar'])->middleware('autorizacao:imp_substr_ver');
+Route::get('/substrato_impressao/{id?}', [App\Http\Controllers\ImpressaoSubstratoController::class, 'Buscar'])->middleware('autorizacao:imp_substr_edit');
+Route::post('/substrato_impressao/salvar', [App\Http\Controllers\ImpressaoSubstratoController::class, 'Salvar'])->middleware('autorizacao:imp_substr_edit');
+Route::post('/substrato_impressao/deletar', [App\Http\Controllers\ImpressaoSubstratoController::class, 'Deletar'])->middleware('autorizacao:imp_substr_edit');
 
 Route::get('/produtos', [App\Http\Controllers\ProdutoController::class, 'Produtos'])->middleware('autorizacao:produto_ver');
-Route::get('/produto', [App\Http\Controllers\ProdutoController::class, 'Produto'])->middleware('autorizacao:produto_edit');
 Route::get('/produto/{id?}', [App\Http\Controllers\ProdutoController::class, 'Produto'])->middleware('autorizacao:produto_edit');
 Route::post('/produto/salvar', [App\Http\Controllers\ProdutoController::class, 'ProdutoSalvar'])->middleware('autorizacao:produto_edit');
 Route::post('/produto/deletar', [App\Http\Controllers\ProdutoController::class, 'ProdutoDeletar'])->middleware('autorizacao:produto_edit');
 Route::get('/duplicar_produto/{id}', [App\Http\Controllers\ProdutoController::class, 'Duplicar'])->middleware('autorizacao:produto_edit');
 
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'Clientes'])->middleware('autorizacao:cliente_ver');
-Route::get('/cliente', [App\Http\Controllers\ClienteController::class, 'Cliente'])->middleware('autorizacao:cliente_edit');
 Route::get('/cliente/{id?}', [App\Http\Controllers\ClienteController::class, 'Cliente'])->middleware('autorizacao:cliente_edit');
 Route::post('/cliente/salvar', [App\Http\Controllers\ClienteController::class, 'Salvar'])->middleware('autorizacao:cliente_edit');
 Route::post('/novo_cliente', [App\Http\Controllers\ClienteController::class, 'NovoCliente'])->middleware('autorizacao:cliente_edit');
 Route::post('/usuario_ftp', [App\Http\Controllers\ClienteController::class, 'UsuarioFTP'])->middleware('autorizacao:cliente_edit');
 
 Route::get('/servicos', [App\Http\Controllers\ServicoController::class, 'Servicos'])->middleware('autorizacao:servico_ver');
-Route::get('/servico', [App\Http\Controllers\ServicoController::class, 'Servico'])->middleware('autorizacao:servico_edit');
 Route::get('/servico/{id?}', [App\Http\Controllers\ServicoController::class, 'Servico'])->middleware('autorizacao:servico_edit');
 Route::post('/servico/salvar', [App\Http\Controllers\ServicoController::class, 'ServicoSalvar'])->middleware('autorizacao:servico_edit');
 Route::post('/servico/deletar', [App\Http\Controllers\ServicoController::class, 'ServicoDeletar'])->middleware('autorizacao:servico_edit');

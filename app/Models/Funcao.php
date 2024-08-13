@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Funcao extends Model
 {
@@ -14,8 +13,8 @@ class Funcao extends Model
 
 	protected $fillable = ['chave','descricao'];
 
-	public function perfis(): BelongsTo
+	public function perfis()
     {
-        return $this->belongsTo(Perfil::class);
+        return $this->belongsToMany(Perfil::class);
     }
 }

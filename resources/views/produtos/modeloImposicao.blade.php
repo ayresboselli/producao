@@ -21,15 +21,15 @@
 		<form action='/modelo_imposicao/salvar' method='post'>
 			@csrf
 			<input type='hidden' id='id' name='id' value='{{ $modelo->id }}'>
-			
+
 			<div class="form-row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="imposicao" class="small mb-1"><span class="text-danger">*</span> Ferramenta de imposição</label>
-						<select id="imposicao" name="imposicao" class="form-control py-1" required>
+						<label for="imposicao_tipo_id" class="small mb-1"><span class="text-danger">*</span> Ferramenta de imposição</label>
+						<select id="imposicao_tipo_id" name="imposicao_tipo_id" class="form-control py-1" required>
 							<option value=''>-- Selecione --</option>
 							@foreach($ferramentas as $ferramenta)
-							<option value='{{ $ferramenta->id }}' @if($ferramenta->id == $modelo->id_imposicao) selected @endif>{{ $ferramenta->titulo }}</option>
+							<option value='{{ $ferramenta->id }}' @if($ferramenta->id == $modelo->imposicao_tipo_id) selected @endif>{{ $ferramenta->titulo }}</option>
 							@endforeach
 						</select>
 					</div>
@@ -41,26 +41,12 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="form-group">
 				<label for="descricao" class="small mb-1">Descrição</label>
 				<textarea id="descricao" name="descricao" placeholder="Descrição" class="form-control py-1">{{ $modelo->descricao }}</textarea>
 			</div>
-			
-			<!--
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group mt-4 mb-0 text-left">
-						<a href="/modelos_imposicao" class="btn btn-default">Voltar</a>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group mt-4 mb-0 text-right">
-						<button class="btn btn-primary">Salvar</button>
-					</div>
-				</div>
-			</div>
-			-->
+
 			<div class="form-group mt-4 mb-0 text-right">
 				<button class="btn btn-primary">Salvar</button>
 			</div>

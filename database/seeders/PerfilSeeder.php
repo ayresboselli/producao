@@ -21,7 +21,7 @@ class PerfilSeeder extends Seeder
 
         for ($i = 1; $i <= 41; $i++)
         {
-            DB::table('perfil_funcao')->insert([
+            DB::table('funcao_perfil')->insert([
                 'perfil_id' => 1,
                 'funcao_id' => $i,
                 'created_at' => date('Y-m-d H:i:s'),

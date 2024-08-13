@@ -25,7 +25,7 @@
 				<p>{{ session('erro') }}</p>
 			</div>
 		@endif
-		
+
 		<div class="table-responsive">
 			<table class="table table-bordered dataTable" width="100%" cellspacing="0">
 				<thead>
@@ -51,7 +51,7 @@
 					@foreach($modelos as $modelo)
 					<tr>
 						<td>{{ $modelo->titulo }}</td>
-						<td>{{ $modelo->imposicao }}</td>
+						<td>{{ $modelo->tipo!=null?$modelo->tipo->titulo:'' }}</td>
 						<td>{{ $modelo->descricao }}</td>
 						<td style="max-width:60px">
 							@if(in_array('imp_mod_edit', session()->get('funcoes')))
@@ -60,7 +60,11 @@
 									<a href="/modelo_imposicao/{{ $modelo->id }}" title='Alterar' class='text-primary'><i class='fa fa-edit'></i></a>
 								</div>
 								<div class='col-sm-6'>
-									@if($modelo->produtos == 0)<a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $modelo->id }},'{{ $modelo->titulo }}')" class='text-danger'><i class='fa fa-trash'></i></a>@endif
+									@if(count($modelo->produtos) == 0)
+                                    <a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $modelo->id }},'{{ $modelo->titulo }}')" class='text-danger'>
+                                        <i class='fa fa-trash'></i>
+                                    </a>
+                                    @endif
 								</div>
 							</div>
 							@endif
@@ -104,8 +108,8 @@
 		</div>
 	</div>
 </div>
-		
-		
+
+
 <script>
 function Deletar(id, titulo){
 	$('#id_deletar').val(id)

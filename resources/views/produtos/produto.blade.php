@@ -34,7 +34,7 @@
 		<form action='/produto/salvar' method='post'>
 			@csrf
 			<input type='hidden' id='id' name='id' value='{{ $produto->id }}'>
-			
+
 			<div class="form-row">
 				<div class="col-md-3">
 					<div class="form-group">
@@ -48,53 +48,53 @@
 						<input type="text" id="titulo" name="titulo" value='{{ $produto->titulo }}' placeholder="Título" class="form-control py-1" required>
 					</div>
 				</div>
-				
+
 			</div>
-			
+
 			<div class="form-row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="imposicao" class="small mb-1">Ferramenta de imposição</label>
-						<select id="imposicao" name="imposicao" class="form-control py-1">
+						<label for="imposicao_tipo_id" class="small mb-1">Ferramenta de imposição</label>
+						<select id="imposicao_tipo_id" name="imposicao_tipo_id" class="form-control py-1">
 							<option value=''>Nenhum</option>
 							@foreach($ferramentas as $ferramenta)
-							<option value='{{ $ferramenta->id }}' @if($ferramenta->id == $produto->id_imposicao_tipo) selected @endif>{{ $ferramenta->titulo }}</option>
+							<option value='{{ $ferramenta->id }}' @if($ferramenta->id == $produto->imposicao_tipo_id) selected @endif>{{ $ferramenta->titulo }}</option>
 							@endforeach
 						</select>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="modelo" class="small mb-1">Modelo de imposição</label>
-						<select id="modelo" name="modelo" class="form-control py-1">
+						<label for="imposicao_nome_id" class="small mb-1">Modelo de imposição</label>
+						<select id="imposicao_nome_id" name="imposicao_nome_id" class="form-control py-1">
 							<option value=''>Nenhum</option>
 							@foreach($modelos as $modelo)
-							<option value='{{ $modelo->id }}' @if($modelo->id == $produto->id_imposicao_nome) selected @endif>{{ $modelo->titulo }}</option>
+							<option value='{{ $modelo->id }}' @if($modelo->id == $produto->imposicao_nome_id) selected @endif>{{ $modelo->titulo }}</option>
 							@endforeach
 						</select>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="form-row">
 				<div class="col-md-3">
 					<div class="form-group">
-						<label for="hotfolder" class="small mb-1">HotFolder de impressão</label>
-						<select id="hotfolder" name="hotfolder" class="form-control py-1">
+						<label for="impressao_hotfolder_id" class="small mb-1">HotFolder de impressão</label>
+						<select id="impressao_hotfolder_id" name="impressao_hotfolder_id" class="form-control py-1">
 							<option value=''>Nenhum</option>
 							@foreach($hotfolders as $hotfolder)
-							<option value='{{ $hotfolder->id }}' @if($hotfolder->id == $produto->id_impressao_hotfolder) selected @endif>{{ $hotfolder->titulo }}</option>
+							<option value='{{ $hotfolder->id }}' @if($hotfolder->id == $produto->impressao_hotfolder_id) selected @endif>{{ $hotfolder->titulo }}</option>
 							@endforeach
 						</select>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="form-group">
-						<label for="substrato" class="small mb-1">Substrato de impressão</label>
-						<select id="substrato" name="substrato" class="form-control py-1">
+						<label for="impressao_substrato_id" class="small mb-1">Substrato de impressão</label>
+						<select id="impressao_substrato_id" name="impressao_substrato_id" class="form-control py-1">
 							<option value=''>Nenhum</option>
 							@foreach($substratos as $substrato)
-							<option value='{{ $substrato->id }}' @if($substrato->id == $produto->id_impressao_substrato) selected @endif>{{ $substrato->titulo }}</option>
+							<option value='{{ $substrato->id }}' @if($substrato->id == $produto->impressao_substrato_id) selected @endif>{{ $substrato->titulo }}</option>
 							@endforeach
 						</select>
 					</div>
@@ -130,9 +130,9 @@
 					</div>
 				</div>
 			</div>
-			
-			
-			
+
+
+
 			<div id="dv_sangria">
 				<div class="form-row">
 					<div class="col-md-6">
@@ -148,7 +148,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label class="small mb-1">Sangria (mm)</label>
 					<table>
@@ -192,7 +192,7 @@
 					</table>
 				</div>
 			</div>
-			
+
 			<div class="form-group mt-4 mb-0 text-right">
 				<button class="btn btn-primary">Salvar</button>
 			</div>
@@ -225,13 +225,13 @@
 				altura -= (altura * ((largura - limite)/largura));
 				largura = limite;
 			}
-			
+
 			$("#dv_tamanho").width(largura);
 			$("#dv_tamanho").height(altura);
-			
+
 		}
 	}
-	
+
 	document.addEventListener("DOMContentLoaded", function(event) {
 		SemDimensao();
 		TamanhoProduto();

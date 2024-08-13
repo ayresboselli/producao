@@ -59,8 +59,8 @@
 					<tr>
 						<td>{{ $produto->id_externo }}</td>
 						<td>{{ $produto->titulo }}</td>
-						<td>{{ $produto->tp_imposicao }}</td>
-						<td>{{ $produto->mod_imposicao }}</td>
+						<td>{{ $produto->imposicao_tipo!=null?$produto->imposicao_tipo->titulo:'' }}</td>
+						<td>{{ $produto->imposicao_nome!=null?$produto->imposicao_nome->titulo:'' }}</td>
 						<td>
 							@if($produto->sem_dimensao)
 							Sem dimensão
@@ -85,7 +85,11 @@
 									<a href="/duplicar_produto/{{ $produto->id }}" title='Duplicar' class='text-primary'><i class='fa fa-copy'></i></a>
 								</div>
 								<div class='col-sm-4'>
-									@if($produto->itens == 0)<a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $produto->id }},'{{ $produto->titulo }}')" class='text-danger'><i class='fa fa-trash'></i></a>@endif
+									@if(count($produto->itens) == 0)
+                                    <a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $produto->id }},'{{ $produto->titulo }}')" class='text-danger'>
+                                        <i class='fa fa-trash'></i>
+                                    </a>
+                                    @endif
 								</div>
 							</div>
 							@endif

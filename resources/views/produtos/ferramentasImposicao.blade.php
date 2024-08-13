@@ -13,7 +13,7 @@
 		<a href="/ferramenta_imposicao" class="btn btn-primary btn-sm">Adicionar</a>
 	</div>
 	<div class="card-body">
-		
+
 		@if (session('status'))
 			<div class="alert alert-success alert-dismissible">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,7 +26,7 @@
 				<p>{{ session('erro') }}</p>
 			</div>
 		@endif
-		
+
 		<div class="table-responsive">
 			<table class="table table-bordered dataTable" width="100%" cellspacing="0">
 				<thead>
@@ -58,7 +58,11 @@
 									<a href="/ferramenta_imposicao/{{ $ferramenta->id }}" title='Alterar' class='text-primary'><i class='fa fa-edit'></i></a>
 								</div>
 								<div class='col-sm-6'>
-									@if($ferramenta->produtos == 0)<a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $ferramenta->id }},'{{ $ferramenta->titulo }}')" class='text-danger'><i class='fa fa-trash'></i></a>@endif
+									@if(count($ferramenta->produtos) == 0 && count($ferramenta->nomes) == 0)
+                                    <a href="javascript:void(0)" title='Excluir' onclick="Deletar({{ $ferramenta->id }},'{{ $ferramenta->titulo }}')" class='text-danger'>
+                                        <i class='fa fa-trash'></i>
+                                    </a>
+                                    @endif
 								</div>
 							</div>
 							@endif
@@ -71,8 +75,8 @@
 		</div>
 	</div>
 </div>
-	
-	
+
+
 
 
 <!-- Modal Deletar -->
@@ -104,10 +108,10 @@
 		</div>
 	</div>
 </div>
-		
-		
-		
-		
+
+
+
+
 <script>
 function Deletar(id, titulo){
 	$('#id_deletar').val(id)

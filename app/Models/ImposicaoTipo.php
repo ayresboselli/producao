@@ -15,4 +15,9 @@ class ImposicaoTipo extends Model
     {
         return $this->hasMany(Produto::class);
     }
+
+    public function nomes(): HasMany
+    {
+        return $this->hasMany(ImposicaoNome::class);
+    }
 }

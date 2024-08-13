@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePerfilFuncaoTable extends Migration
+class CreateFuncaoPerfilTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePerfilFuncaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('perfil_funcao', function (Blueprint $table) {
+        Schema::create('funcao_perfil', function (Blueprint $table) {
             $table->id();
             $table->unsignedBiginteger('perfil_id');
             $table->unsignedBiginteger('funcao_id');

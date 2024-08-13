@@ -25,11 +25,13 @@ class CreateProdutosTable extends Migration
 			$table->string('titulo',80);
 			$table->integer('largura');
 			$table->integer('altura');
+			$table->boolean('sem_dimensao');
 			$table->integer('sangr_sup')->nullable();
 			$table->integer('sangr_inf')->nullable();
 			$table->integer('sangr_esq')->nullable();
 			$table->integer('sangr_dir')->nullable();
 			$table->string('disposicao',80)->nullable();
+			$table->boolean('renomear');
             $table->timestamps();
 
 			$table->foreign('imposicao_tipo_id')->references('id')->on('imposicao_tipos');

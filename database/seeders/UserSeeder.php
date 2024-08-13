@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s')
         ]);
 
-        DB::table('user_perfil')->insert([
+        DB::table('perfil_user')->insert([
             'user_id' => 1,
             'perfil_id' => 1,
             'created_at' => date('Y-m-d H:i:s'),

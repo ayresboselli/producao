@@ -29,44 +29,27 @@ class HomeController extends Controller
         $produtos = Produto::orderBy('id_externo', 'ASC')->get();
 
         return view(
-            'home', 
+            'home',
             [
-                'contador' => $this->Contadores(),
+                'contador' => (object)[
+                    'abertas' => 0,
+                    'arquivamento' => 0,
+                    'imprimir' => 0,
+                    'recorte' => 0,
+                ], //$this->Contadores(),
                 'autorizacao' => session()->get('funcoes'),
                 'produtos' => $produtos
             ]
         );
     }
 
-    private function Autorizacao()
-    {
-        if(is_null(session()->get('funcoes')))
-        {
-            $sql = "SELECT DISTINCT f.chave FROM funcaos f
-            JOIN perfis_funcoes pf ON pf.id_funcao = f.id
-            JOIN perfils p ON p.id = pf.id_perfil
-            JOIN usuarios_perfis up ON up.id_perfil = p.id
-            WHERE up.id_usuario = :id_usuario";
-            
-            $funcoes = DB::select($sql, ['id_usuario' => Auth()->user()->id]);
-            
-            $lista = [];
-            foreach($funcoes as $funcao)
-            {
-                $lista[] = $funcao->chave;
-            }
-
-            session()->put('funcoes',$lista);
-        }
-    }
-
     public function StatusServicos()
     {
-        $sql = "SELECT 
-            id, 
-            servico, 
-            descricao, 
-            tempo, 
+        $sql = "SELECT
+            id,
+            servico,
+            descricao,
+            tempo,
             reiniciar,
             DATE_FORMAT (ultimo_processo,'%d/%m/%Y %H:%i:%s') ultimo_processo,
             if(unix_timestamp(now()) - unix_timestamp(ultimo_processo) < tempo,1,0) ativo
@@ -86,7 +69,7 @@ class HomeController extends Controller
                 (SELECT count(id) arquivamento FROM pedidos WHERE data_fechamento IS NOT NULL AND arquivar IS NULL) arquivamento,
                 (
                     SELECT count(id) imprimir FROM (
-                        SELECT i.id, i.quantidade, i.imprimir, count(f.id) arquivos, count(r.id) recorte 
+                        SELECT i.id, i.quantidade, i.imprimir, count(f.id) arquivos, count(r.id) recorte
                         FROM pedido_items i
                         JOIN pedidos p ON p.id = i.id_pedido AND p.excluido = 0
                         LEFT JOIN pedido_albums a ON a.id_item = i.id
@@ -106,7 +89,7 @@ class HomeController extends Controller
                         GROUP BY i.id
                     ) t
                 ) recorte";
-        
+
         $contadores = DB::select($sql);
 
         return $contadores[0];
@@ -115,7 +98,7 @@ class HomeController extends Controller
     public function ImpressaoMensal()
     {
         $sql = "SELECT * FROM (
-                    SELECT sum(pro.quantidade) quantidade, substring(orca.data_cadastro,1,7) mes 
+                    SELECT sum(pro.quantidade) quantidade, substring(orca.data_cadastro,1,7) mes
                     FROM zangraf_xkey_principal.cad_orca orca
                     JOIN zangraf_xkey_producao.producoes pro ON pro.cod_producao = orca.codigo
                     GROUP BY substring(orca.data_cadastro,1,7)
@@ -125,7 +108,7 @@ class HomeController extends Controller
                 ORDER BY mes ASC";
         return DB::connection('mysqlXKey')->select($sql);
     }
-    
+
     public function PerdaMensal()
     {
         $sql = "SELECT * FROM (
@@ -141,7 +124,7 @@ class HomeController extends Controller
     public function ProducaoMensal()
     {
         $sql = "SELECT * FROM (
-                    SELECT count(orca.codigo) quantidade, substring(orca.data_cadastro,1,7) mes 
+                    SELECT count(orca.codigo) quantidade, substring(orca.data_cadastro,1,7) mes
                     FROM zangraf_xkey_principal.cad_orca orca
                     JOIN zangraf_xkey_producao.producoes pro ON pro.cod_producao = orca.codigo
                     GROUP BY substring(orca.data_cadastro,1,7)
@@ -151,10 +134,10 @@ class HomeController extends Controller
                 ORDER BY mes ASC";
         return DB::connection('mysqlXKey')->select($sql);
     }
-    
+
     public function OpPorCelula()
     {
-        $sql = "SELECT 
+        $sql = "SELECT
                     opr.DESCRICAO AS celula, COUNT(0) AS quantidade
                 FROM
                     zangraf_xkey_producao.producoes pdc
@@ -168,17 +151,17 @@ class HomeController extends Controller
                 ORDER BY quantidade DESC";
         return DB::connection('mysqlXKey')->select($sql);
     }
-    
+
     public function TempoPorCelula()
     {
         $sql = "SELECT avg(
-                        unix_timestamp(concat(apt.data_termino,' ', apt.hora_termino)) - 
+                        unix_timestamp(concat(apt.data_termino,' ', apt.hora_termino)) -
                         unix_timestamp(concat(apt.data_inicio,' ', apt.hora_inicio))
                     ) tempo,
                     iop.descricao celula
                 FROM zangraf_xkey_producao.apontamento apt
                 JOIN zangraf_xkey_producao.itemoperacao iop ON iop.codigo = apt.operacao
-                WHERE apt.situacao = 'FINALIZADO' 
+                WHERE apt.situacao = 'FINALIZADO'
                     AND length(iop.descricao) > 1
                     AND apt.data_inicio > date_sub(curdate(), interval 3 month)
                 GROUP BY iop.descricao
@@ -191,11 +174,11 @@ class HomeController extends Controller
         $sql = "SELECT
                     concat(prd.codigo, ' - ', prd.descricao) produto,
                     count(orc.codigo) quantidade
-                FROM 
+                FROM
                     zangraf_xkey_principal.cad_orca orc
                     JOIN zangraf_xkey_principal.pro_orca prc ON prc.orcamento = orc.codigo
                     JOIN zangraf_xkey_publico.cad_prod prd ON prd.codigo = prc.produto
-                WHERE 
+                WHERE
                     orc.DATA_CADASTRO between '2021-01-01' and '2021-12-31'
                     and prd.grupo = 1
                 GROUP BY prd.codigo
@@ -209,10 +192,10 @@ class HomeController extends Controller
         $sql = "SELECT
                     concat(pro.PRODUTO, ' - ', prd.descricao) produto,
                     SUM(pro.QUANTIDADE) quantidade
-                FROM 
+                FROM
                     zangraf_xkey_producao.producoes pro
                     JOIN zangraf_xkey_publico.cad_prod prd ON prd.codigo = pro.produto
-                WHERE 
+                WHERE
                     pro.inicio between '2021-01-01' and '2021-12-31'
                 GROUP BY pro.PRODUTO
                 ORDER BY SUM(pro.QUANTIDADE) desc
@@ -234,58 +217,58 @@ class HomeController extends Controller
     {
         $sql = "SELECT * FROM(
                     SELECT
-                        mes, 
+                        mes,
                         /*
-                        SUM(FI) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 fi, 
-                        SUM(CA) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 ca, 
-                        SUM(BM) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 bm, 
-                        SUM(EA) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 ea, 
+                        SUM(FI) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 fi,
+                        SUM(CA) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 ca,
+                        SUM(BM) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 bm,
+                        SUM(EA) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 ea,
                         SUM(AI) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 ai,
-                        SUM(RE) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 re 
+                        SUM(RE) / (SUM(RE) + SUM(FI) + SUM(BM) + SUM(CA) + SUM(EA) + SUM(AI)) * 100 re
                         */
-                        SUM(FI) fi, 
-                        SUM(CA) ca, 
-                        SUM(BM) bm, 
-                        SUM(EA) ea, 
+                        SUM(FI) fi,
+                        SUM(CA) ca,
+                        SUM(BM) bm,
+                        SUM(EA) ea,
                         SUM(AI) ai,
-                        SUM(RE) re 
-                        
+                        SUM(RE) re
+
                     FROM(
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, count(SITUACAO) RE, 0 FI, 0 BM, 0 CA, 0 EA, 0 AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'RE'
                         GROUP BY substring(DATA_CADASTRO, 1, 7), situacao
-                    
+
                         UNION
-                    
+
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, 0 RE, count(SITUACAO) FI, 0 BM, 0 CA, 0 EA, 0 AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'FI'
                         GROUP BY substring(DATA_CADASTRO, 1, 7), situacao
-                    
+
                         UNION
-                    
+
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, 0 RE, 0 FI, count(SITUACAO) BM, 0 CA, 0 EA, 0 AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'BM'
                         GROUP BY substring(DATA_CADASTRO, 1, 7), situacao
-                    
+
                         UNION
-                    
+
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, 0 RE, 0 FI, 0 BM, count(SITUACAO) CA, 0 EA, 0 AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'CA'
                         GROUP BY substring(DATA_CADASTRO, 1, 7), situacao
-                    
+
                         UNION
-                    
+
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, 0 RE, 0 FI, 0 BM, 0 CA, count(SITUACAO) EA, 0 AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'EA'
                         GROUP BY substring(DATA_CADASTRO, 1, 7), situacao
-                    
+
                         UNION
-                    
+
                         SELECT substring(DATA_CADASTRO, 1, 7) mes, 0 RE, 0 FI, 0 BM, 0 CA, 0 EA, count(SITUACAO) AI
                         FROM zangraf_xkey_principal.cad_orca
                         WHERE SITUACAO = 'AI'
@@ -296,20 +279,20 @@ class HomeController extends Controller
                     LIMIT 12
                 ) L
                 ORDER BY MES ASC";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
-    
+
     // Financeiro
     public function IndiceLiquidez()
     {
         $sql = "SELECT * FROM (
-                    SELECT * FROM indice_liquidez 
-                    ORDER BY data DESC 
+                    SELECT * FROM indice_liquidez
+                    ORDER BY data DESC
                     LIMIT 12
-                ) T 
+                ) T
                 ORDER BY data";
-        
+
         return DB::select($sql);
     }
 
@@ -328,10 +311,10 @@ class HomeController extends Controller
                     LIMIT 24
                 ) T
                 ORDER BY data ASC";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
-    
+
     public function TotalPagarReceber()
     {
         $sql = "SELECT
@@ -344,7 +327,7 @@ class HomeController extends Controller
                     UNION
                     SELECT 0 ct_pagar, 0 ct_receb, sum(valor) ch_pagar, 0 ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.che_emit WHERE USADO_CT_PAGAR = 'S' AND SITUACAO = 'A'
                     UNION
-                    SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, sum(valor) ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C' 
+                    SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, sum(valor) ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C'
                     UNION
                     SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, 0 ch_receb, sum(valor_liq) cartao_pagar FROM zangraf_xkey_financeiro.cartao_mvtos WHERE COD_ANTECIPACAO = 0 and BAIXADO = 'N'
                 ) T";
@@ -363,7 +346,7 @@ class HomeController extends Controller
                 GROUP BY fornecedor
                 ORDER BY valor DESC
                 LIMIT 5";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
 
@@ -372,7 +355,7 @@ class HomeController extends Controller
         $sql = "SELECT sum(valor) valor, concat(clie.codigo, ' - ', clie.nome) cliente FROM(
                     SELECT valor, cliente FROM zangraf_xkey_financeiro.ct_receb WHERE VALOR_PAGO = 0 AND AGRUP_DESTINO = 0
                     UNION
-                    SELECT valor, cliente FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C' 
+                    SELECT valor, cliente FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C'
                     UNION
                     SELECT valor_liq valor, cliente FROM zangraf_xkey_financeiro.cartao_mvtos WHERE COD_ANTECIPACAO = 0 and BAIXADO = 'N'
                 ) receber
@@ -380,7 +363,7 @@ class HomeController extends Controller
                 GROUP BY cliente
                 ORDER BY valor DESC
                 LIMIT 5";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
 
@@ -399,7 +382,7 @@ class HomeController extends Controller
                     UNION
                     SELECT 0 ct_pagar, 0 ct_receb, sum(valor) ch_pagar, 0 ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.che_emit WHERE USADO_CT_PAGAR = 'S' AND SITUACAO = 'A'
                     UNION
-                    SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, sum(valor) ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C' 
+                    SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, sum(valor) ch_receb, 0 cartao_pagar FROM zangraf_xkey_financeiro.cheques WHERE situacao = 'C'
                     UNION
                     SELECT 0 ct_pagar, 0 ct_receb, 0 ch_pagar, 0 ch_receb, sum(valor_liq) cartao_pagar FROM zangraf_xkey_financeiro.cartao_mvtos WHERE COD_ANTECIPACAO = 0 and BAIXADO = 'N'
                 ) T";
@@ -410,14 +393,14 @@ class HomeController extends Controller
     {
         $sql = "SELECT * FROM (
                     SELECT
-                        mes, 
+                        mes,
                         sum(valor) valor,
                         sum(produzido) produzido,
                         sum(perdido) perdido,
                         sum(perdido) * 100 / (sum(perdido) + sum(produzido)) perdas_percentual
                     FROM (
                         SELECT
-                            substring(orc.data_cadastro, 1, 7) mes, 
+                            substring(orc.data_cadastro, 1, 7) mes,
                             orc.codigo,
                             crec.valor,
                             0 produzido,
@@ -433,7 +416,7 @@ class HomeController extends Controller
                         UNION
 
                         SELECT
-                            substring(orc.data_cadastro, 1, 7) mes, 
+                            substring(orc.data_cadastro, 1, 7) mes,
                             orc.codigo,
                             0 valor,
                             coalesce(sum(apd.produzido), 0) produzido,
@@ -450,7 +433,7 @@ class HomeController extends Controller
                     ORDER BY mes DESC
                 LIMIT 6) T
                 ORDER BY mes";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
 
@@ -459,15 +442,15 @@ class HomeController extends Controller
         $sql = "SELECT * FROM (
                     SELECT mes, sum(compras) compras, sum(vendas) vendas FROM (
                         --  VENDAS  --
-                        SELECT substring(DATA_EMISSAO,1,7) mes, sum(TOTAL_NF) compras, 0 vendas 
+                        SELECT substring(DATA_EMISSAO,1,7) mes, sum(TOTAL_NF) compras, 0 vendas
                         FROM zangraf_xkey_principal.cad_nf
                         WHERE CLI_FOR = 'C' AND CANCELADA = 'N' AND TRANSACAO NOT IN(29, 36)
                         GROUP BY substring(DATA_EMISSAO,1,7)
-                        
+
                         UNION
-                        
+
                         --  COMPRAS  --
-                        SELECT substring(DATA_EMISSAO,1,7) mes, 0 compras, sum(TOTAL_NF) vendas 
+                        SELECT substring(DATA_EMISSAO,1,7) mes, 0 compras, sum(TOTAL_NF) vendas
                         FROM zangraf_xkey_principal.cad_nf
                         WHERE CLI_FOR = 'F' AND CANCELADA = 'N'
                         GROUP BY substring(DATA_EMISSAO,1,7)
@@ -476,9 +459,9 @@ class HomeController extends Controller
                     ORDER BY mes DESC
                     LIMIT 12) t
                 ORDER BY mes";
-        
+
         $lista = DB::connection('mysqlXKey')->select($sql);
-        
+
         $total_compras = 0;
         $total_vendas = 0;
         foreach($lista as $item)
@@ -507,34 +490,34 @@ class HomeController extends Controller
                     SELECT 'Recebidos' tipo, SUM(valor) valor FROM zangraf_xkey_financeiro.ct_receb
                     WHERE tipo_recebimento = 23 AND YEAR(vencimento) = YEAR(CURRENT_DATE()) AND MONTH(vencimento) = MONTH(CURRENT_DATE())
                     AND valor_pago > 0
-                
+
                     UNION
-                
+
                     -- VENCIDOS
                     SELECT 'Vencidos' tipo, SUM(valor) valor FROM zangraf_xkey_financeiro.ct_receb
                     WHERE tipo_recebimento = 23 AND YEAR(vencimento) = YEAR(CURRENT_DATE()) AND MONTH(vencimento) = MONTH(CURRENT_DATE()) AND WEEK(vencimento) < WEEK(CURRENT_DATE())
                     AND DAY(vencimento) < DAY(CURRENT_DATE()) AND valor_pago < valor AND cartorio = '0000-00-00'
-                
+
                     UNION
-                
+
                     -- A VENCER
                     SELECT 'A vencer' tipo, SUM(valor) valor FROM zangraf_xkey_financeiro.ct_receb
                     WHERE tipo_recebimento = 23 AND YEAR(vencimento) = YEAR(CURRENT_DATE()) AND MONTH(vencimento) = MONTH(CURRENT_DATE())
                     AND DAY(vencimento) >= DAY(CURRENT_DATE()) AND valor_pago < valor AND cartorio = '0000-00-00'
                 ) T";
-        
+
         return DB::connection('mysqlXKey')->select($sql);
     }
 
     public function BoletosAVencerPorSemana()
     {
-        $sql = "SELECT SUM(valor) valor 
+        $sql = "SELECT SUM(valor) valor
                 FROM zangraf_xkey_financeiro.ct_receb
-                WHERE 
-                    YEAR(vencimento) = YEAR(CURRENT_DATE()) AND 
-                    WEEK(vencimento) = WEEK(CURRENT_DATE()) AND 
-                    valor_pago < valor AND 
-                    tipo_recebimento = 23 AND 
+                WHERE
+                    YEAR(vencimento) = YEAR(CURRENT_DATE()) AND
+                    WEEK(vencimento) = WEEK(CURRENT_DATE()) AND
+                    valor_pago < valor AND
+                    tipo_recebimento = 23 AND
                     cartorio = '0000-00-00'";
         return DB::connection('mysqlXKey')->select($sql);
     }
@@ -555,7 +538,7 @@ class HomeController extends Controller
     // Indicadores por OP
     public function IndicadoresPorOP(Request $request)
     {
-        $sql = "SELECT i.descricao indicador, count(a.id) quantidade 
+        $sql = "SELECT i.descricao indicador, count(a.id) quantidade
                 FROM indicadores_apontamentos a
                 JOIN indicadores_listas i ON a.id_indicador = i.id
                 JOIN reimpressao_album_laminas l ON l.id = a.id_lamina
@@ -570,7 +553,7 @@ class HomeController extends Controller
     // Indicadores por produto
     public function IndicadoresPorProduto(Request $request)
     {
-        $sql = "SELECT i.descricao indicador, count(a.id) quantidade 
+        $sql = "SELECT i.descricao indicador, count(a.id) quantidade
                 FROM indicadores_apontamentos a
                 JOIN indicadores_listas i ON a.id_indicador = i.id
                 JOIN reimpressao_album_laminas l ON l.id = a.id_lamina
